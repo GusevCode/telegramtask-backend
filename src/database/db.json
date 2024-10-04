@@ -1,0 +1,18 @@
+{
+    "clients": [
+        {
+            "id": "UUID{1}",
+            "name": "John",
+            "surname": "Smith",
+            "date": "01.01.1234",
+            "deposit": "123"
+        },
+        {
+            "id": "UUID{2}",
+            "name": "Adam",
+            "surname": "Test",
+            "date": "01.01.1232",
+            "deposit": "213"
+        }
+    ]
+}

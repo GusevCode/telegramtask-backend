@@ -1,11 +1,13 @@
-const express = require('express')
+const express = require('express');
 
-const v1Router = require('./v1/routes')
+const bodyParser = require('body-parser');
+const v1ClientRouter = require('./v1/routes/clientRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use('/api/v1', v1Router);
+app.use(bodyParser.json());
+app.use('/api/v1/clients', v1ClientRouter);
 
 app.listen(PORT, () => {
     console.log(`API is listening on port ${PORT}`);
