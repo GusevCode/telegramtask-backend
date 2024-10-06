@@ -3,18 +3,18 @@ const Client = require('../database/Client');
 
 const getAllClients = () => {
     const allClients = Client.getAllClients();
-
     return allClients;
 };
 
-const getOneClient = () => {
-    return;
+const getOneClient = (clientId) => {
+    const client = Client.getOneClient(clientId);
+    return client;
 };
 
-const createNewClient = () => {
+const createNewClient = (newClient) => {
     const clientToInsert = {
-        ...createNewClient,
         id: uuid(),
+        ...newClient,
     }
     
     const createdClient = Client.createNewClient(
@@ -24,12 +24,16 @@ const createNewClient = () => {
     return createdClient;
 };
 
-const updateOneClient = () => {
-    return;
+const updateOneClient = (clientId, changes) => {
+    const updatedClient = Client.updateOneClient(
+        clientId,
+        changes
+    );
+    return updatedClient;
 };
 
-const deleteOneClient = () => {
-    return;
+const deleteOneClient = (clientId) => {
+    Client.deleteOneClient(clientId);
 };
 
 module.exports = {

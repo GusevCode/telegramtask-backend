@@ -10,9 +10,15 @@ const getAllClients = (req, res) => {
 };
 
 const getOneClient = (req, res) => {
-    const client  = clientService.getOneClient();
+    const {
+        params: {clientId},
+    } = req;
 
-    res.send('Get client by id');
+    if (!clientId) {
+        return;
+    }
+    const client = clientService.getOneClient(clientId);
+    res.send({ status: 'OK', data: client });
 };
 
 const createNewClient = (req, res) => {
@@ -44,15 +50,34 @@ const createNewClient = (req, res) => {
 };
 
 const updateOneClient = (req, res) => {
-    const updatedClient = clientService.updateOneClient();
+    const {
+        body,
+        params: { clientId }
+    } = req;
 
-    res.send('Update client');
+    if (!clientId) {
+        return;
+    }
+
+    const updatedClient = clientService.updateOneClient(
+        clientId,
+        body
+    );
+
+    res.send({ status: 'OK', data: updatedClient });
 };
 
 const deleteOneClient = (req, res) => {
-    const deletedClient = clientService.deleteOneClient();
+    const {
+        params: { clientId },
+    } = req;
 
-    res.send('Delete client');
+    if (!clientId) {
+        return;
+    }
+
+    clientService.deleteOneClient(clientId);
+    res.status(204).send({ status: 'OK' });
 };
 
 module.exports = {
