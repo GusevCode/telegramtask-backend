@@ -43,7 +43,7 @@ const createNewEvent = (req, res) => {
     res.status(201).send({
         status: 'OK',
         data: createdEvent,
-    })
+    });
 }
 
 const updateOneEvent = (req, res) => {
@@ -125,6 +125,55 @@ const addClient = (req, res) => {
     });
 }
 
+const getAllExpenses = (req, res) => {
+    const {
+        params: {eventId},
+    } = req;
+
+    if (!eventId) {
+        return;
+    }
+
+    const expenses = eventService.getAllExpenses(eventId);
+    res.send({
+        status: 'No',
+        data: expenses,
+    });
+}
+
+const addExpense = (req, res) => {
+    const {
+        params: { eventId },
+    } = req;
+
+    if (!eventId) {
+        return;
+    }
+
+    const { body } = req;
+
+    if (
+        !body.date ||
+        !body.name ||
+        !body.sum
+    ) {
+        return;
+    }
+
+    const expenseToAdd = {
+        name: body.name,
+        date: body.date,
+        sum: body.sum        
+    }
+
+    const addedExpense = eventService.addExpense(eventId, expenseToAdd);
+
+    res.status(201).send({
+        status: 'OK',
+        data: addedExpense,
+    });
+}
+
 module.exports = {
     getAllEvents,
     getOneEvent,
@@ -134,4 +183,7 @@ module.exports = {
 
     getAllClients,
     addClient,
+    
+    getAllExpenses,
+    addExpense,
 };

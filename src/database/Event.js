@@ -86,7 +86,34 @@ const addClient = (eventId, client) => {
     }
 
     DB.events[eventIdx].clients.push(client);
+    saveToDatabase(DB);
     return client;
+}
+
+const getAllExpenses = (eventId) => {
+    const eventIdx = DB.events.findIndex (
+        (event) => event.id === eventId
+    );
+
+    if (eventIdx === -1) {
+        return;
+    }
+
+    return DB.events[eventIdx].expenses;
+}
+
+const addExpense = (eventId, expense) => {
+    const eventIdx = DB.events.findIndex (
+        (event) => event.id === eventId
+    );
+
+    if (eventIdx === -1) {
+        return;
+    }
+
+    DB.events[eventIdx].expenses.push(expense);
+    saveToDatabase(DB);
+    return expense;
 }
 
 module.exports = {
@@ -98,4 +125,7 @@ module.exports = {
 
     getAllClients,
     addClient,
+
+    getAllExpenses,
+    addExpense,
 }

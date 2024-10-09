@@ -54,7 +54,13 @@
     {
       "id": "3adac49c-581b-4b4c-853c-19b9c7b83d06",
       "name": "newEvent",
-      "date": "03.25.1234"
+      "date": "03.25.1234",
+      "clients": [
+
+      ],
+      "expenses": [
+
+      ]
     }
   ]
 }

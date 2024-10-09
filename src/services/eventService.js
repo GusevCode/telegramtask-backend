@@ -45,6 +45,14 @@ const addClient = (eventId, client) => {
     return Event.addClient(eventId, client);
 }
 
+const getAllExpenses = (eventId) => {
+    return Event.getAllExpenses(eventId);
+}
+
+const addExpense = (eventId, expenseToAdd) => {
+    return Event.addExpense(eventId, expenseToAdd);
+}
+
 module.exports = {
     getAllEvents,
     getOneEvent,
@@ -54,4 +62,7 @@ module.exports = {
 
     getAllClients,
     addClient,
+
+    getAllExpenses,
+    addExpense,
 };
