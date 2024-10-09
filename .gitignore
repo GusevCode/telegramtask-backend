@@ -22,3 +22,5 @@ logs/*.pid
 
 # Environment variables
 .env*
+
+/src/database/db.json
