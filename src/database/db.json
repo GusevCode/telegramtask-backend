@@ -55,12 +55,19 @@
       "id": "3adac49c-581b-4b4c-853c-19b9c7b83d06",
       "name": "newEvent",
       "date": "03.25.1234",
+      "clients": [],
+      "expenses": []
+    },
+    {
+      "id": "698c7dbc-1fca-4c31-8c65-d1a44019d6fd",
+      "name": "test",
+      "date": "123",
       "clients": [
-
+        {
+          "id": "123"
+        }
       ],
-      "expenses": [
-
-      ]
+      "expenses": []
     }
   ]
 }

@@ -15,6 +15,8 @@ const createNewEvent = (newEvent) => {
     const eventToInsert = {
         id: uuid(),
         ...newEvent,
+        clients: [],
+        expenses: []
     }
 
     const createdEvent = Event.createNewEvent(
