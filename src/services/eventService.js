@@ -53,6 +53,10 @@ const addExpense = (eventId, expenseToAdd) => {
     return Event.addExpense(eventId, expenseToAdd);
 }
 
+const getOneExpense = (eventId, expenseId) => {
+    return Event.getOneExpense(eventId, expenseId);
+}
+
 module.exports = {
     getAllEvents,
     getOneEvent,

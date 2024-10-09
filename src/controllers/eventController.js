@@ -136,7 +136,7 @@ const getAllExpenses = (req, res) => {
 
     const expenses = eventService.getAllExpenses(eventId);
     res.send({
-        status: 'No',
+        status: 'OK',
         data: expenses,
     });
 }
@@ -171,6 +171,22 @@ const addExpense = (req, res) => {
     res.status(201).send({
         status: 'OK',
         data: addedExpense,
+    });
+}
+
+const getOneExpense = (req, res) => {
+    const {
+        params: { eventId, expenseId },
+    } = req;
+
+    if (!eventId || !expenseId) {
+        return;
+    }
+
+    const expense = eventService.getOneExpense(eventId, expenseId);
+    res.status(201).send({
+        status: 'OK',
+        data: expense,
     });
 }
 

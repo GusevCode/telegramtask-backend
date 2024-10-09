@@ -65,7 +65,7 @@ const deleteOneEvent = (eventId) => {
 }
 
 const getAllClients = (eventId) => {
-    const event = DB.events.find (
+    const event = DB.events.find(
         (event) => event.id === eventId
     );
 
@@ -77,7 +77,7 @@ const getAllClients = (eventId) => {
 }
 
 const addClient = (eventId, client) => {
-    const eventIdx = DB.events.findIndex (
+    const eventIdx = DB.events.findIndex(
         (event) => event.id === eventId
     );
 
@@ -91,7 +91,7 @@ const addClient = (eventId, client) => {
 }
 
 const getAllExpenses = (eventId) => {
-    const eventIdx = DB.events.findIndex (
+    const eventIdx = DB.events.findIndex(
         (event) => event.id === eventId
     );
 
@@ -103,7 +103,7 @@ const getAllExpenses = (eventId) => {
 }
 
 const addExpense = (eventId, expense) => {
-    const eventIdx = DB.events.findIndex (
+    const eventIdx = DB.events.findIndex(
         (event) => event.id === eventId
     );
 
@@ -114,6 +114,22 @@ const addExpense = (eventId, expense) => {
     DB.events[eventIdx].expenses.push(expense);
     saveToDatabase(DB);
     return expense;
+}
+
+const getOneExpense = (eventId, expenseId) => {
+    const eventIdx = DB.events.findIndex (
+        (event) => eventId === event.id,
+    );
+
+    if (eventIDx === -1) {
+        return;
+    }
+
+    const expenseIdx = DB.events[eventIdx].expenses.findIndex(
+        (expense) => expense.id == expenseId,
+    )
+
+    return DB.events[eventIdx].expenses[expenseIdx];
 }
 
 module.exports = {
