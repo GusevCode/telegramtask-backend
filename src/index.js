@@ -23,4 +23,4 @@ app.use('/api/v1/events', v1EventRouter);
 app.listen(PORT, () => {
     console.log(`API is listening on port ${PORT}`);
     console.log(`Running at http://localhost:3000/`)
-})
+});

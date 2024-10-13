@@ -1,7 +1,7 @@
 const eventService = require('../services/eventService');
 
-const getAllEvents = (req, res) => {
-    const allEvents = eventService.getAllEvents();
+const getAllEvents = async (req, res) => {
+    const allEvents = await eventService.getAllEvents();
 
     res.send({
         status: 'OK',
@@ -9,7 +9,7 @@ const getAllEvents = (req, res) => {
     });
 };
 
-const getOneEvent = (req, res) => {
+const getOneEvent = async (req, res) => {
     const {
         params: {eventId}
     } = req;
@@ -18,11 +18,11 @@ const getOneEvent = (req, res) => {
         return;
     }
 
-    const event = eventService.getOneEvent(eventId);
+    const event = await eventService.getOneEvent(eventId);
     res.send({ status: 'OK', data: event });
 }
 
-const createNewEvent = (req, res) => {
+const createNewEvent = async (req, res) => {
     const { body } = req;
     if (
         !body.name ||
@@ -36,7 +36,7 @@ const createNewEvent = (req, res) => {
         date: body.date,
     }
 
-    const createdEvent = eventService.createNewEvent(
+    const createdEvent = await eventService.createNewEvent(
         newEvent
     );
 
@@ -46,7 +46,7 @@ const createNewEvent = (req, res) => {
     });
 }
 
-const updateOneEvent = (req, res) => {
+const updateOneEvent = async (req, res) => {
     const {
         body,
         params: { eventId }
@@ -56,7 +56,7 @@ const updateOneEvent = (req, res) => {
         return;
     }
 
-    const updatedEvent = eventService.updateOneEvent(
+    const updatedEvent = await eventService.updateOneEvent(
         eventId,
         body
     );
@@ -64,7 +64,7 @@ const updateOneEvent = (req, res) => {
     res.send({ status: 'OK', data: updatedEvent });
 }
 
-const deleteOneEvent = (req, res) => {
+const deleteOneEvent = async (req, res) => {
     const {
         params: { eventId },
     } = req;
@@ -73,12 +73,12 @@ const deleteOneEvent = (req, res) => {
         return;
     }
 
-    eventService.deleteOneEvent(eventId);
+    await eventService.deleteOneEvent(eventId);
     res.status(204).send({ status: 'OK' });
 }
 
 
-const getAllClients = (req, res) => {
+const getAllClients = async (req, res) => {
     const {
         params: { eventId },
     } = req;
@@ -87,14 +87,14 @@ const getAllClients = (req, res) => {
         return;
     }
 
-    const clients = eventService.getAllClients(eventId);
+    const clients = await eventService.getAllClients(eventId);
     res.send( {
         status: 'OK',
         data: clients,
     });
 }
 
-const addClient = (req, res) => {
+const addClient = async (req, res) => {
     const {
         params: {eventId}
     } = req;
@@ -115,7 +115,7 @@ const addClient = (req, res) => {
         id: body.id,
     }
 
-    const addedClient = eventService.addClient(
+    const addedClient = await eventService.addClient(
         eventId, clientToAdd
     );
 
@@ -125,7 +125,7 @@ const addClient = (req, res) => {
     });
 }
 
-const getAllExpenses = (req, res) => {
+const getAllExpenses = async (req, res) => {
     const {
         params: {eventId},
     } = req;
@@ -134,14 +134,14 @@ const getAllExpenses = (req, res) => {
         return;
     }
 
-    const expenses = eventService.getAllExpenses(eventId);
+    const expenses = await eventService.getAllExpenses(eventId);
     res.send({
         status: 'OK',
         data: expenses,
     });
 }
 
-const addExpense = (req, res) => {
+const addExpense = async (req, res) => {
     const {
         params: { eventId },
     } = req;
@@ -166,7 +166,7 @@ const addExpense = (req, res) => {
         sum: body.sum        
     }
 
-    const addedExpense = eventService.addExpense(eventId, expenseToAdd);
+    const addedExpense = await eventService.addExpense(eventId, expenseToAdd);
 
     res.status(201).send({
         status: 'OK',
@@ -174,7 +174,7 @@ const addExpense = (req, res) => {
     });
 }
 
-const getOneExpense = (req, res) => {
+const getOneExpense = async (req, res) => {
     const {
         params: { eventId, expenseId },
     } = req;
@@ -183,7 +183,7 @@ const getOneExpense = (req, res) => {
         return;
     }
 
-    const expense = eventService.getOneExpense(eventId, expenseId);
+    const expense = await eventService.getOneExpense(eventId, expenseId);
     res.status(201).send({
         status: 'OK',
         data: expense,

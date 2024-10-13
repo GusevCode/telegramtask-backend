@@ -1,7 +1,7 @@
 const clientService  = require('../services/clientService');
 
-const getAllClients = (req, res) => {
-    const allClients = clientService.getAllClients();
+const getAllClients = async (req, res) => {
+    const allClients = await clientService.getAllClients();
 
     res.send({ 
         status: 'OK',
@@ -9,7 +9,7 @@ const getAllClients = (req, res) => {
      });
 };
 
-const getOneClient = (req, res) => {
+const getOneClient = async (req, res) => {
     const {
         params: {clientId},
     } = req;
@@ -17,11 +17,11 @@ const getOneClient = (req, res) => {
     if (!clientId) {
         return;
     }
-    const client = clientService.getOneClient(clientId);
+    const client = await clientService.getOneClient(clientId);
     res.send({ status: 'OK', data: client });
 };
 
-const createNewClient = (req, res) => {
+const createNewClient = async (req, res) => {
     const { body } = req;
     if (
         !body.name ||
@@ -39,7 +39,7 @@ const createNewClient = (req, res) => {
         deposit: body.deposit,
     }
 
-    const createdClient = clientService.createNewClient(
+    const createdClient = await clientService.createNewClient(
         newClient
     );
 
@@ -49,7 +49,7 @@ const createNewClient = (req, res) => {
     });
 };
 
-const updateOneClient = (req, res) => {
+const updateOneClient = async (req, res) => {
     const {
         body,
         params: { clientId }
@@ -59,7 +59,7 @@ const updateOneClient = (req, res) => {
         return;
     }
 
-    const updatedClient = clientService.updateOneClient(
+    const updatedClient = await clientService.updateOneClient(
         clientId,
         body
     );
@@ -67,7 +67,7 @@ const updateOneClient = (req, res) => {
     res.send({ status: 'OK', data: updatedClient });
 };
 
-const deleteOneClient = (req, res) => {
+const deleteOneClient = async (req, res) => {
     const {
         params: { clientId },
     } = req;
@@ -76,7 +76,7 @@ const deleteOneClient = (req, res) => {
         return;
     }
 
-    clientService.deleteOneClient(clientId);
+    await clientService.deleteOneClient(clientId);
     res.status(204).send({ status: 'OK' });
 };
 

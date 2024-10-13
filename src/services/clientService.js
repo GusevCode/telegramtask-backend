@@ -1,39 +1,39 @@
 const { v4: uuid } = require('uuid');
 const Client = require('../database/Client');
 
-const getAllClients = () => {
-    const allClients = Client.getAllClients();
+const getAllClients = async () => {
+    const allClients = await Client.getAllClients();
     return allClients;
 };
 
-const getOneClient = (clientId) => {
-    const client = Client.getOneClient(clientId);
+const getOneClient = async (clientId) => {
+    const client = await Client.getOneClient(clientId);
     return client;
 };
 
-const createNewClient = (newClient) => {
+const createNewClient = async (newClient) => {
     const clientToInsert = {
         id: uuid(),
         ...newClient,
     }
     
-    const createdClient = Client.createNewClient(
+    const createdClient = await Client.createNewClient(
         clientToInsert,
     );
     
     return createdClient;
 };
 
-const updateOneClient = (clientId, changes) => {
-    const updatedClient = Client.updateOneClient(
+const updateOneClient = async (clientId, changes) => {
+    const updatedClient = await Client.updateOneClient(
         clientId,
         changes
     );
     return updatedClient;
 };
 
-const deleteOneClient = (clientId) => {
-    Client.deleteOneClient(clientId);
+const deleteOneClient = async (clientId) => {
+    await Client.deleteOneClient(clientId);
 };
 
 module.exports = {

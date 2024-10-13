@@ -1,17 +1,17 @@
 const { v4: uuid } = require('uuid');
 const Event = require('../database/Event')
 
-const getAllEvents = () => {
-    const allEvents = Event.getAllEvents();
+const getAllEvents = async () => {
+    const allEvents = await Event.getAllEvents();
     return allEvents;
 };
 
-const getOneEvent = (eventId) => {
-    const event = Event.getOneEvent(eventId);
+const getOneEvent = async (eventId) => {
+    const event = await Event.getOneEvent(eventId);
     return event;
 }
 
-const createNewEvent = (newEvent) => {
+const createNewEvent = async (newEvent) => {
     const eventToInsert = {
         id: uuid(),
         ...newEvent,
@@ -19,44 +19,50 @@ const createNewEvent = (newEvent) => {
         expenses: []
     }
 
-    const createdEvent = Event.createNewEvent(
+    const createdEvent = await Event.createNewEvent(
         eventToInsert,
     );
 
     return createdEvent;
 }
 
-const updateOneEvent = (eventId, changes) => {
-    const updatedEvent = Event.updateOneEvent(
+const updateOneEvent = async (eventId, changes) => {
+    const updatedEvent = await Event.updateOneEvent(
         eventId, 
         changes
     );
     return updatedEvent;
 }
 
-const deleteOneEvent = (eventId) => {
-    Event.deleteOneEvent(eventId);
+const deleteOneEvent = async (eventId) => {
+    await Event.deleteOneEvent(eventId);
 }
 
-const getAllClients = (eventId) => {
-    const clients = Event.getAllClients(eventId);
+const getAllClients = async (eventId) => {
+    const clients = await Event.getAllClients(eventId);
     return clients;
 }
 
-const addClient = (eventId, client) => {
-    return Event.addClient(eventId, client);
+const addClient = async (eventId, client) => {
+    return await Event.addClient(eventId, client);
 }
 
-const getAllExpenses = (eventId) => {
-    return Event.getAllExpenses(eventId);
+const getAllExpenses = async (eventId) => {
+    return await Event.getAllExpenses(eventId);
 }
 
-const addExpense = (eventId, expenseToAdd) => {
-    return Event.addExpense(eventId, expenseToAdd);
+const addExpense = async (eventId, newExpense) => {
+
+    const expenseToAdd = {
+        id: uuid(),
+        ...newExpense,
+    }
+
+    return await Event.addExpense(eventId, expenseToAdd);
 }
 
-const getOneExpense = (eventId, expenseId) => {
-    return Event.getOneExpense(eventId, expenseId);
+const getOneExpense = async (eventId, expenseId) => {
+    return await Event.getOneExpense(eventId, expenseId);
 }
 
 module.exports = {

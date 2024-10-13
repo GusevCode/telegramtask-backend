@@ -1,135 +1,202 @@
-const DB = require('./db.json');
-const { saveToDatabase } = require('./utils');
+const { DB_URL, DB_NAME } = require('./config');
 
-const getAllEvents = () => {
-    return DB.events;
+const MongoClient = require('mongodb').MongoClient;
+const mongoClient = new MongoClient(DB_URL);
+
+const getAllEvents = async () => {
+    let result = [];
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        result = await collection.find().toArray();
+
+        result.forEach(event => {
+            delete event["_id"];
+        });
+
+    } catch(err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
+    }
+
+    return result;
 }
 
-const getOneEvent = (eventId) => {
-    const event = DB.events.find(
-        (event) => event.id === eventId
-    );
+const getOneEvent = async (eventId) => {
+    let result = {};
 
-    if (!event) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        result = (await collection.find({id: eventId}).toArray()).at(0);
+        delete result["_id"];
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    return event;
+    return result;
 }
 
-const createNewEvent = (newEvent) => {
-    const isAlreadyAdded = 
-        DB.events.findIndex(
-            (event) => event.id === newEvent.id
-        ) > -1;
+const createNewEvent = async (newEvent) => {
+    const result = newEvent;
 
-    if (isAlreadyAdded) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        const isAlreadyAdded = (await collection.find({id: newEvent.id}).toArray()).at(0);
+
+        if (typeof isAlreadyAdded === "undefined") {
+            const res = await collection.insertOne(newEvent);
+        }
+
+        delete result["_id"];
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    DB.events.push(newEvent);
-    saveToDatabase(DB);
-    return newEvent;
+    return result;
 }
 
-const updateOneEvent = (eventId, changes) => {
-    const indexForUpdate = DB.events.findIndex(
-        (event) => event.id === eventId
-    );
+const updateOneEvent = async (eventId, changes) => {
+    const result = changes;
 
-    if (indexForUpdate === -1) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        const isAlreadyAdded = (await collection.find({id: eventId}).toArray()).at(0);
+
+        if (typeof isAlreadyAdded !== "undefined") {
+            const res = await collection.findOneAndUpdate({id: eventId}, { $set: changes });
+        }
+
+        result = (await collection.find({id: eventId}).toArray()).at(0);
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    const updatedEvent = {
-        ...DB.events[indexForUpdate],
-        ...changes,
-    }
-
-    DB.events[indexForUpdate] = updatedEvent;
-    saveToDatabase(DB);
-    return updatedEvent;
+    return result;
 }
 
-const deleteOneEvent = (eventId) => {
-    const indexForDeletion = DB.events.findIndex(
-        (event) => event.id === eventId
-    );
+const deleteOneEvent = async (eventId) => {
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
 
-    if (indexForDeletion === -1) {
-        return;
+        const res = await collection.deleteOne({id: eventId});
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
-
-    DB.events.splice(indexForDeletion, 1);
-    saveToDatabase(DB);
 }
 
-const getAllClients = (eventId) => {
-    const event = DB.events.find(
-        (event) => event.id === eventId
-    );
+const getAllClients = async (eventId) => {
+    let result = [];
 
-    if (!event) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        const res = (await collection.find({id: eventId}).toArray()).at(0);
+        delete res["_id"];
+
+        res.clients.forEach(client => {
+            result.push({
+                id: client,
+            });
+        });
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    return event.clients;
+    return result;
 }
 
-const addClient = (eventId, client) => {
-    const eventIdx = DB.events.findIndex(
-        (event) => event.id === eventId
-    );
+const addClient = async (eventId, client) => { 
+    let result = client;
 
-    if (eventIdx === -1) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+        
+        const idToInsert = client.id;
+        const res = collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: idToInsert}}});
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    DB.events[eventIdx].clients.push(client);
-    saveToDatabase(DB);
-    return client;
+    return result;
 }
 
-const getAllExpenses = (eventId) => {
-    const eventIdx = DB.events.findIndex(
-        (event) => event.id === eventId
-    );
+const getAllExpenses = async (eventId) => {
+    let result = [];
 
-    if (eventIdx === -1) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        const res = (await collection.find({id: eventId}).toArray()).at(0);
+        delete res["_id"];
+
+        return res.expenses;
+
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    return DB.events[eventIdx].expenses;
+    return result;
 }
 
-const addExpense = (eventId, expense) => {
-    const eventIdx = DB.events.findIndex(
-        (event) => event.id === eventId
-    );
+const addExpense = async (eventId, expense) => {
+    let result = expense;
 
-    if (eventIdx === -1) {
-        return;
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+        
+        console.log(expense);
+
+        const res = collection.findOneAndUpdate({id: eventId}, {$push: {expenses: {...expense}}})
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
     }
 
-    DB.events[eventIdx].expenses.push(expense);
-    saveToDatabase(DB);
-    return expense;
+    return result;
 }
 
 const getOneExpense = (eventId, expenseId) => {
-    const eventIdx = DB.events.findIndex (
-        (event) => eventId === event.id,
-    );
-
-    if (eventIDx === -1) {
-        return;
-    }
-
-    const expenseIdx = DB.events[eventIdx].expenses.findIndex(
-        (expense) => expense.id == expenseId,
-    )
-
-    return DB.events[eventIdx].expenses[expenseIdx];
+    console.log('Not yet implemented');
 }
 
 module.exports = {
