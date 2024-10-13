@@ -1,6 +1,7 @@
 //Requires
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 
 //Routes
 const v1ClientRouter = require('./v1/routes/clientRoutes');
@@ -11,6 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Early init
+app.use(cors());
 app.use(bodyParser.json());
 
 //Init

@@ -68,6 +68,13 @@
         }
       ],
       "expenses": []
+    },
+    {
+      "id": "59cc766b-9b4d-4ca4-af2a-272ff6b315d7",
+      "name": "newTest",
+      "date": "01.02.2003",
+      "clients": [],
+      "expenses": []
     }
   ]
 }
