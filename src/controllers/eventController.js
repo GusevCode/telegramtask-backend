@@ -88,7 +88,7 @@ const getAllClients = async (req, res) => {
     }
 
     const clients = await eventService.getAllClients(eventId);
-    res.send( {
+    res.send({
         status: 'OK',
         data: clients,
     });

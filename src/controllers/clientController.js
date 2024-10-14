@@ -61,7 +61,7 @@ const updateOneClient = async (req, res) => {
 
     const updatedClient = await clientService.updateOneClient(
         clientId,
-        body
+        body,
     );
 
     res.send({ status: 'OK', data: updatedClient });
