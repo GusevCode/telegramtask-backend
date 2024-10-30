@@ -26,8 +26,7 @@ const createNewClient = async (req, res) => {
     if (
         !body.name ||
         !body.surname || 
-        !body.date ||
-        !body.deposit
+        !body.date
     ) {
         return;
     }
@@ -36,7 +35,6 @@ const createNewClient = async (req, res) => {
         name: body.name,
         surname: body.surname,
         date: body.date,
-        deposit: body.deposit,
     }
 
     const createdClient = await clientService.createNewClient(

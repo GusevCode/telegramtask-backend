@@ -13,7 +13,6 @@ router.get('/:eventId/clients', eventController.getAllClients);
 router.post('/:eventId/clients', eventController.addClient); 
 
 router.get('/:eventId/expenses', eventController.getAllExpenses);
-// router.get('/:eventId/expenses/:expenseId', eventController.getOneExpense)
 router.post('/:eventId/expenses', eventController.addExpense);
 
 module.exports = router;
