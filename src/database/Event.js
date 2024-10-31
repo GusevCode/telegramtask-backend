@@ -44,6 +44,24 @@ const getOneEvent = async (eventId) => {
     return result;
 }
 
+const getAllEventsByYearAndMonth = async (year, month) => {
+    let result = {};
+    
+    try {
+        await mongoClient.connect();
+        const db = mongoClient.db(DB_NAME);
+        const collection = db.collection('events');
+
+        result = (await collection.find({"date.year": year, "date.month": month}).toArray());
+    } catch (err) {
+        console.log(err);
+    } finally {
+        mongoClient.close();
+    }
+
+    return result;
+}
+
 const createNewEvent = async (newEvent) => {
     const result = newEvent;
 
@@ -142,8 +160,7 @@ const addClient = async (eventId, client) => {
         const db = mongoClient.db(DB_NAME);
         const collection = db.collection('events');
         
-        const idToInsert = client.id;
-        const res = collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: idToInsert}}});
+        const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: client.id, deposit: client.deposit}}});
     } catch (err) {
         console.log(err);
     } finally {
@@ -211,4 +228,6 @@ module.exports = {
 
     getAllExpenses,
     addExpense,
+
+    getAllEventsByYearAndMonth,
 }

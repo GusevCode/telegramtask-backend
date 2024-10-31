@@ -17,9 +17,11 @@ const createNewEvent = async (newEvent) => {
     const eventToInsert = {
         id: uuid(),
         name: newEvent.name,
-        year: String(date.getFullYear()),
-        month: String(date.getMonth() + 1),
-        day: String(date.getDate()),
+        date: {  
+            year: String(date.getFullYear()),
+            month: String(date.getMonth() + 1),
+            day: String(date.getDate()),
+        },
         clients: [],
         expenses: []
     }

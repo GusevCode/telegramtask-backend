@@ -106,13 +106,15 @@ const addClient = async (req, res) => {
     const { body } = req;
 
     if (
-        !body.id
+        !body.id ||
+        !body.deposit 
     ) {
         return;
     }
 
     const clientToAdd = {
         id: body.id,
+        deposit: body.deposit,
     }
 
     const addedClient = await eventService.addClient(
