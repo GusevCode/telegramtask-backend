@@ -1,13 +1,9 @@
-const { DB_URL, DB_NAME } = require('./config');
-
-const MongoClient = require('mongodb').MongoClient;
-const mongoClient = new MongoClient(DB_URL);
+const { getDb } = require('./db');
 
 const getAllEvents = async () => {
     let result = [];
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         result = await collection.find().toArray();
@@ -18,8 +14,6 @@ const getAllEvents = async () => {
 
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -29,16 +23,13 @@ const getOneEvent = async (eventId) => {
     let result = {};
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         result = (await collection.find({id: eventId}).toArray()).at(0);
         delete result["_id"];
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -48,15 +39,12 @@ const getAllEventsByYearAndMonth = async (year, month) => {
     let result = {};
     
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         result = (await collection.find({"date.year": year, "date.month": month}).toArray());
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -66,8 +54,7 @@ const createNewEvent = async (newEvent) => {
     const result = newEvent;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         const isAlreadyAdded = (await collection.find({id: newEvent.id}).toArray()).at(0);
@@ -80,8 +67,6 @@ const createNewEvent = async (newEvent) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -91,8 +76,7 @@ const updateOneEvent = async (eventId, changes) => {
     const result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         const isAlreadyAdded = (await collection.find({id: eventId}).toArray()).at(0);
@@ -105,8 +89,6 @@ const updateOneEvent = async (eventId, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -114,15 +96,12 @@ const updateOneEvent = async (eventId, changes) => {
 
 const deleteOneEvent = async (eventId) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         const res = await collection.deleteOne({id: eventId});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 }
 
@@ -130,8 +109,7 @@ const getAllClients = async (eventId) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         const res = (await collection.find({id: eventId}).toArray()).at(0);
@@ -145,8 +123,6 @@ const getAllClients = async (eventId) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -156,15 +132,12 @@ const addClient = async (eventId, client) => {
     let result = client;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
         
         const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: client.id, deposit: client.deposit}}});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -174,8 +147,7 @@ const getAllExpenses = async (eventId) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
 
         const res = (await collection.find({id: eventId}).toArray()).at(0);
@@ -185,8 +157,6 @@ const getAllExpenses = async (eventId) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -196,8 +166,7 @@ const addExpense = async (eventId, expense) => {
     let result = expense;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('events');
         
         console.log(expense);
@@ -205,8 +174,6 @@ const addExpense = async (eventId, expense) => {
         const res = collection.findOneAndUpdate({id: eventId}, {$push: {expenses: {...expense}}})
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;

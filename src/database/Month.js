@@ -1,25 +1,20 @@
 const { DB_URL, DB_NAME } = require('./config');
-
-const MongoClient = require('mongodb').MongoClient;
-const mongoClient = new MongoClient(DB_URL);
+const { getDb } = require('./db');
 
 const getAllPromotionExpensesByYearAndMonth = async (yearNumber, monthNumber) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('promotion_expenses');
         
         result = await collection.find({year: yearNumber, month: monthNumber}).toArray();
-        
+
         result.forEach(expense => {
             delete expense["_id"];
         });
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -29,8 +24,7 @@ const createNewPromotionExpense = async (promotion) => {
     const result = promotion;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('promotion_expenses');
 
         const isAlreadyAdded = (await collection.find({id: promotion.id}).toArray()).at(0);
@@ -41,8 +35,6 @@ const createNewPromotionExpense = async (promotion) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -52,8 +44,7 @@ const updatePromotionExpense = async (promotionId, changes) => {
     let result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('promotion_expenses');
 
         const isAlready = (await collection.find({id: promotionId}).toArray()).at(0);
@@ -66,8 +57,6 @@ const updatePromotionExpense = async (promotionId, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -75,15 +64,12 @@ const updatePromotionExpense = async (promotionId, changes) => {
 
 const deletePromotionExpense = async (promotionId) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('promotion_expenses');
 
         const res = await collection.deleteOne({id: promotionId});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 };
 
@@ -91,8 +77,7 @@ const getAllOrgExpensesByYearAndMonth = async (yearNumber, monthNumber) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('org_expenses');
         
         result = await collection.find({year: yearNumber, month: monthNumber}).toArray();
@@ -102,8 +87,6 @@ const getAllOrgExpensesByYearAndMonth = async (yearNumber, monthNumber) => {
         });
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -113,8 +96,7 @@ const createNewOrgExpense = async (org) => {
     const result = org;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('org_expenses');
 
         const isAlreadyAdded = (await collection.find({id: org.id}).toArray()).at(0);
@@ -125,8 +107,6 @@ const createNewOrgExpense = async (org) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -136,8 +116,7 @@ const updateOrgExpense = async (orgId, changes) => {
     let result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('org_expenses');
 
         const isAlready = (await collection.find({id: orgId}).toArray()).at(0);
@@ -150,8 +129,6 @@ const updateOrgExpense = async (orgId, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -159,15 +136,12 @@ const updateOrgExpense = async (orgId, changes) => {
 
 const deleteOrgExpense = async (orgId) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('org_expenses');
 
         const res = await collection.deleteOne({id: orgId});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 };
 
@@ -175,8 +149,7 @@ const getAllInvestitionExpensesByYearAndMonth = async (yearNumber, monthNumber) 
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('investition_expenses');
         
         result = await collection.find({year: yearNumber, month: monthNumber}).toArray();
@@ -186,8 +159,6 @@ const getAllInvestitionExpensesByYearAndMonth = async (yearNumber, monthNumber) 
         });
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -197,8 +168,7 @@ const createNewInvestitionExpense = async (investition) => {
     const result = investition;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('investition_expenses');
 
         const isAlreadyAdded = (await collection.find({id: investition.id}).toArray()).at(0);
@@ -209,8 +179,6 @@ const createNewInvestitionExpense = async (investition) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -220,8 +188,7 @@ const updateInvestitionExpense = async (investitionId, changes) => {
     let result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('investition_expenses');
 
         const isAlready = (await collection.find({id: investitionId}).toArray()).at(0);
@@ -234,8 +201,6 @@ const updateInvestitionExpense = async (investitionId, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -243,15 +208,12 @@ const updateInvestitionExpense = async (investitionId, changes) => {
 
 const deleteInvestitionExpense = async (investitionId) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('investition_expenses');
 
         const res = await collection.deleteOne({id: investitionId});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 };
 
@@ -259,8 +221,7 @@ const getAllProfitsByYearAndMonth = async (yearNumber, monthNumber) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('profits');
         
         result = await collection.find({year: yearNumber, month: monthNumber}).toArray();
@@ -270,8 +231,6 @@ const getAllProfitsByYearAndMonth = async (yearNumber, monthNumber) => {
         });
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -281,8 +240,7 @@ const createNewProfit = async (profit) => {
     const result = profit;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('profits');
 
         const isAlreadyAdded = (await collection.find({id: profit.id}).toArray()).at(0);
@@ -293,8 +251,6 @@ const createNewProfit = async (profit) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -304,8 +260,7 @@ const updateProfit = async (profitId, changes) => {
     let result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('profits');
 
         const isAlready = (await collection.find({id: profitId}).toArray()).at(0);
@@ -318,8 +273,6 @@ const updateProfit = async (profitId, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -327,15 +280,12 @@ const updateProfit = async (profitId, changes) => {
 
 const deleteProfit = async (profitId) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection('profits');
 
         const res = await collection.deleteOne({id: profitId});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 };
 

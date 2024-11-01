@@ -39,16 +39,24 @@ const getTableDataByYearAndMonth = async (year, month) => {
     });
 
     let totalReport = {
-        amountOfClients: 0,
-        amountOfNewClients: null,
-        incomeSum: 0,
-        expensesSum: 0,
-        profitSum: 0,
-        totalCh: 0,
+        amountOfClients: 0,         // Всего клиентов
+        amountOfNewClients: null,   // Всего новых клиентов
+        incomeSum: 0,               // Всего денег пришло
+        expensesSum: 0,             // Всего расход
+        profitSum: 0,               // Всего прибыль
+        totalCh: 0,                 // Всего CH
 
-        promotionExpensesSum: 0,
-        orgExpensesSum: 0,
-        investitionExpensesSum: 0,
+        promotionExpensesSum: 0,    // Всего расходов на продвижение
+        orgExpensesSum: 0,          // Всего расходов на орг
+        investitionExpensesSum: 0,  // Всего расходов на инвестиции 
+
+        netIncome: 0,               // Чистая прибыль
+        humanActivities: 0,         // Человеко-меро
+        humanPayedActivities: null, // Из них платных
+        averageExtraChargeCommon: 0,      // Средняя наценка общая
+        averageExtraChargePayed: null,    // Средняя наценка платные
+        //Депозиты/Налоги?
+        totalCheckout: null,
     };
 
     events.forEach(event => {
@@ -61,7 +69,6 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     totalReport.totalCh = totalReport.profitSum / totalReport.amountOfClients;
 
-    /*
     let promoExpenses = await Month.getAllPromotionExpensesByYearAndMonth(year, month);
     let orgExpenses = await Month.getAllOrgExpensesByYearAndMonth(year, month);
     let investitionExpenses = await Month.getAllInvestitionExpensesByYearAndMonth(year, month);
@@ -75,10 +82,17 @@ const getTableDataByYearAndMonth = async (year, month) => {
     });
 
     investitionExpenses.forEach((expense) => {
-        totalReport.investitionExpensesSum = Number(expense.sum);
+        totalReport.investitionExpensesSum += Number(expense.sum);
     });
     
-    */
+    totalReport.netIncome = totalReport.incomeSum -
+                            totalReport.promotionExpensesSum - 
+                            totalReport.orgExpensesSum -
+                            totalReport.investitionExpensesSum;
+
+    totalReport.humanActivities = totalReport.amountOfClients;
+
+    totalReport.averageExtraChargeCommon = totalReport.profitSum / totalReport.amountOfClients;
 
     const result = {
         events: events,

@@ -1,14 +1,10 @@
-const { DB_URL, DB_NAME } = require('./config');
-
-const MongoClient = require('mongodb').MongoClient;
-const mongoClient = new MongoClient(DB_URL);
+const { getDb } = require('./db');
 
 const getAllStatsByYearAndMonth = async (socnet, yearNumber, monthNumber) => {
     let result = [];
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection(`${socnet}_stats`);
         
         result = await collection.find({year: yearNumber, month: monthNumber}).toArray();
@@ -18,8 +14,6 @@ const getAllStatsByYearAndMonth = async (socnet, yearNumber, monthNumber) => {
         });
     } catch(err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -29,8 +23,7 @@ const createNewStat = async (socnet, stat) => {
     const result = stat;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection(`${socnet}_stats`);
 
         const isAlreadyAdded = (await collection.find({id: stat.id}).toArray()).at(0);
@@ -41,8 +34,6 @@ const createNewStat = async (socnet, stat) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -52,8 +43,7 @@ const updateStat = async (socnet, id, changes) => {
     let result = changes;
 
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection(`${socnet}_stats`);
 
         const isAlready = (await collection.find({id: id}).toArray()).at(0);
@@ -66,8 +56,6 @@ const updateStat = async (socnet, id, changes) => {
 
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 
     return result;
@@ -75,15 +63,12 @@ const updateStat = async (socnet, id, changes) => {
 
 const deleteStat = async (socnet, id) => {
     try {
-        await mongoClient.connect();
-        const db = mongoClient.db(DB_NAME);
+        const db = await getDb();
         const collection = db.collection(`${socnet}_stats`);
 
         const res = await collection.deleteOne({id: id});
     } catch (err) {
         console.log(err);
-    } finally {
-        mongoClient.close();
     }
 };
 

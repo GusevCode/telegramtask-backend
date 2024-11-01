@@ -31,7 +31,6 @@ app.use((req, res, next) => {
     next();
 })
 
-
 app.use('/api/v1/clients', v1ClientRouter);
 app.use('/api/v1/events', v1EventRouter);
 app.use('/api/v1/month', v1MonthRouter);
