@@ -1,12 +1,20 @@
 const Event = require('../database/Event');
 const Month = require('../database/Month');
+const Deposit = require('../database/Deposit');
+const Tax = require('../database/Tax');
 
 const getTableDataByYearAndMonth = async (year, month) => {
     let events = await Event.getAllEventsByYearAndMonth(year, month);
 
     events.map((elem) => {
         elem.amountOfClients = elem['clients'].length;
-        elem.amountOfNewClients = null;
+        elem.amountOfNewClients = 0;
+
+        elem['clients'].forEach(client => {
+            if (client.isNew) {
+                elem.amountOfClients++;
+            }
+        });
         
         elem.totalIncome = 0;
 
@@ -55,7 +63,11 @@ const getTableDataByYearAndMonth = async (year, month) => {
         humanPayedActivities: null, // Из них платных
         averageExtraChargeCommon: 0,      // Средняя наценка общая
         averageExtraChargePayed: null,    // Средняя наценка платные
-        //Депозиты/Налоги?
+        
+        depositIn: 0,
+        depositOut: 0,
+        tax: 0,
+
         totalCheckout: null,
     };
 
@@ -94,6 +106,24 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     totalReport.averageExtraChargeCommon = totalReport.profitSum / totalReport.amountOfClients;
 
+    // depositIn: 0,
+    // depositOut: 0,
+    // tax: 0,
+
+    let depositIn = await Deposit.getDeposit('in', year, month);
+    let depositOut = await Deposit.getDeposit('out', year, month);
+
+    let tax = await Tax.getTax(year, month);
+
+    totalReport.depositIn = depositIn;
+    totalReport.depositOut = depositOut;
+    totalReport.tax = tax;
+
+    totalReport.totalCheckout = totalReport.netIncome +
+                                totalReport.depositIn -
+                                totalReport.depositOut -
+                                totalReport.tax;
+
     const result = {
         events: events,
         incomes: additionalIncomes,
@@ -105,4 +135,4 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
 module.exports = {
     getTableDataByYearAndMonth,
-}
+};

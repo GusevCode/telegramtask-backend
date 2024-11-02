@@ -15,7 +15,7 @@ const createNewStat = async(socnet, stat) => {
         year: String(date.getFullYear()),
         month: String(date.getMonth() + 1),
         day: String(date.getDate()),
-    }
+    };
 
     const createdStat = await Stats.createNewStat(socnet, statToInsert);
 

@@ -43,7 +43,7 @@ const createNewStat = async (req, res) => {
     const newStat = {
         date: body.date,
         count: body.count,
-    }
+    };
 
     const createdStat = await statsService.createNewStat(
         socnet, 
@@ -88,15 +88,7 @@ const updateStat = async (req, res) => {
 const deleteStat = async (req, res) => {
     const {
         params: {socnet, id},
-        body 
     } = req;
-
-    if (
-        !body.date ||
-        !body.count
-    ) {
-        return;
-    }
 
     if (!avaibleSocnets.includes(socnet)) {
         return;

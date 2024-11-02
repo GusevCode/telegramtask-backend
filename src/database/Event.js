@@ -135,7 +135,7 @@ const addClient = async (eventId, client) => {
         const db = await getDb();
         const collection = db.collection('events');
         
-        const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: client.id, deposit: client.deposit}}});
+        const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: client.id, deposit: client.deposit, isNew: client.isNew}}});
     } catch (err) {
         console.log(err);
     }

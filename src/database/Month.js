@@ -1,4 +1,3 @@
-const { DB_URL, DB_NAME } = require('./config');
 const { getDb } = require('./db');
 
 const getAllPromotionExpensesByYearAndMonth = async (yearNumber, monthNumber) => {
