@@ -6,13 +6,16 @@ const Tax = require('../database/Tax');
 const getTableDataByYearAndMonth = async (year, month) => {
     let events = await Event.getAllEventsByYearAndMonth(year, month);
 
+    let isEvent = false;
+
     events.map((elem) => {
+        isEvent = true;
         elem.amountOfClients = elem['clients'].length;
         elem.amountOfNewClients = 0;
 
         elem['clients'].forEach(client => {
             if (client.isNew) {
-                elem.amountOfClients++;
+                elem.amountOfNewClients++;
             }
         });
         
@@ -37,6 +40,10 @@ const getTableDataByYearAndMonth = async (year, month) => {
         delete elem['expenses'];
     });
 
+    if (!isEvent) {
+        return null;
+    }
+
     let additionalIncomes = await Month.getAllProfitsByYearAndMonth(year, month);
 
     additionalIncomes.forEach(income => {
@@ -48,7 +55,7 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     let totalReport = {
         amountOfClients: 0,         // Всего клиентов
-        amountOfNewClients: null,   // Всего новых клиентов
+        amountOfNewClients: 0,      // Всего новых клиентов
         incomeSum: 0,               // Всего денег пришло
         expensesSum: 0,             // Всего расход
         profitSum: 0,               // Всего прибыль
@@ -68,12 +75,15 @@ const getTableDataByYearAndMonth = async (year, month) => {
         depositOut: 0,
         tax: 0,
 
-        totalCheckout: null,
+        totalCheckout: 0,
+
+        amountOfEvents: 0,
     };
 
     events.forEach(event => {
+        totalReport.amountOfEvents += 1;
         totalReport.amountOfClients += Number(event.amountOfClients);
-        // totalReport.amountOfNewClients 
+        totalReport.amountOfNewClients += Number(event.amountOfNewClients);
         totalReport.incomeSum += Number(event.totalIncome);
         totalReport.expensesSum += Number(event.totalExpenses);
         totalReport.profitSum += Number(event.profit);
@@ -106,23 +116,30 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     totalReport.averageExtraChargeCommon = totalReport.profitSum / totalReport.amountOfClients;
 
-    // depositIn: 0,
-    // depositOut: 0,
-    // tax: 0,
-
     let depositIn = await Deposit.getDeposit('in', year, month);
     let depositOut = await Deposit.getDeposit('out', year, month);
 
     let tax = await Tax.getTax(year, month);
 
-    totalReport.depositIn = depositIn;
-    totalReport.depositOut = depositOut;
-    totalReport.tax = tax;
+    if (typeof depositIn !== 'undefined') {
+        totalReport.depositIn = depositIn;
+        console.log('here');
+    }
 
-    totalReport.totalCheckout = totalReport.netIncome +
-                                totalReport.depositIn -
-                                totalReport.depositOut -
-                                totalReport.tax;
+    if (typeof depositOut !== 'undefined') {
+        totalReport.depositOut = depositOut;
+        console.log('here');
+    }
+    
+    if (typeof tax !== 'undefined') {
+        totalReport.tax = tax;
+        console.log('here');
+    }
+
+    totalReport.totalCheckout = Number(totalReport.netIncome) +
+                                Number(totalReport.depositIn) -
+                                Number(totalReport.depositOut) -
+                                Number(totalReport.tax);
 
     const result = {
         events: events,

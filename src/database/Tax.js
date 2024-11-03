@@ -7,7 +7,7 @@ const getTax = async(year, month) => {
         const db = await getDb();
         const collection = db.collection('taxes');
 
-        result = await collection.find({year: year, month: month}).toArray().at(0);
+        result = (await collection.find({year: year, month: month}).toArray()).at(0);
     } catch (err) {
         console.log(err);
     }
