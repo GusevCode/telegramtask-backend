@@ -120,7 +120,7 @@ const getAllClients = async (eventId) => {
 
         res.clients.forEach(client => {
             result.push({
-                id: client,
+                ...client,
             });
         });
 

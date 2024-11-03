@@ -51,8 +51,19 @@ const getAllClients = async (eventId) => {
 }
 
 const addClient = async (eventId, client) => {
-    const clients = getAllClients(eventId);
-    return await Event.addClient(eventId, client);
+    const clients = await getAllClients(eventId);
+
+    let isExsits = false;
+    clients.forEach(it => {
+        if (it.name == client.name && it.surname == client.surname) {
+            isExsits = true;
+        }
+    });
+    
+    if (!isExsits) {
+        return await Event.addClient(eventId, client);
+    } 
+    return client;
 }
 
 const getAllExpenses = async (eventId) => {
