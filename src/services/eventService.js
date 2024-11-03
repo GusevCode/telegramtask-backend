@@ -51,6 +51,7 @@ const getAllClients = async (eventId) => {
 }
 
 const addClient = async (eventId, client) => {
+    const clients = getAllClients(eventId);
     return await Event.addClient(eventId, client);
 }
 

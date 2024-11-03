@@ -1,4 +1,7 @@
 const { getDb } = require('./db');
+const { v4: uuid } = require('uuid');
+
+const Client = require('./Client');
 
 const getAllEvents = async () => {
     let result = [];
@@ -134,8 +137,50 @@ const addClient = async (eventId, client) => {
     try {
         const db = await getDb();
         const collection = db.collection('events');
-        
-        const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {id: client.id, deposit: client.deposit, isNew: client.isNew}}});
+
+        const isClientExist = await Client.getClientByNameAndSurname(client.name, client.surname);
+
+        if (typeof isClientExist === 'undefined') {
+            const date = new Date();
+
+            const clientToInsert = {
+                id: uuid(),
+                name: client.name,
+                surname: client.surname,
+                deposit: client.deposit,
+                year: String(date.getFullYear()),
+                month: String(date.getMonth() + 1),
+                day: String(date.getDate()),
+                isNew: true,
+            }
+
+            const clientToClientDB = {
+                id: clientToInsert.id,
+                name: client.name,
+                surname: client.surname,
+                year: String(date.getFullYear()),
+                month: String(date.getMonth() + 1),
+                day: String(date.getDate()),
+            }
+
+            await Client.createNewClient(clientToClientDB);
+            const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {...clientToInsert}}});
+        } else {
+            const date = new Date();
+
+            const clientToInsert = {
+                id: uuid(),
+                name: client.name,
+                surname: client.surname,
+                deposit: client.deposit,
+                year: String(date.getFullYear()),
+                month: String(date.getMonth() + 1),
+                day: String(date.getDate()),
+                isNew: false,
+            }
+
+            const res = await collection.findOneAndUpdate({id: eventId}, {$push: {clients: {...clientToInsert}}});
+        }
     } catch (err) {
         console.log(err);
     }
