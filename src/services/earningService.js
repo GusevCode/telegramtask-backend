@@ -111,7 +111,7 @@ const getTableDataByYearAndMonth = async (year, month) => {
         totalReport.investitionExpensesSum += Number(expense.sum);
     });
     
-    totalReport.netIncome = totalReport.incomeSum -
+    totalReport.netIncome = totalReport.profitSum -
                             totalReport.promotionExpensesSum - 
                             totalReport.orgExpensesSum -
                             totalReport.investitionExpensesSum;
