@@ -138,9 +138,9 @@ const addClient = async (eventId, client) => {
         const db = await getDb();
         const collection = db.collection('events');
 
-        const isClientExist = await Client.getClientByNameAndSurname(client.name, client.surname);
+        const foundClient = await Client.getClientByNameAndSurname(client.name, client.surname);
 
-        if (typeof isClientExist === 'undefined') {
+        if (typeof foundClient === 'undefined') {
             const date = new Date();
 
             const clientToInsert = {
@@ -169,9 +169,9 @@ const addClient = async (eventId, client) => {
             const date = new Date();
 
             const clientToInsert = {
-                id: client.id,
-                name: client.name,
-                surname: client.surname,
+                id: foundClient.id,
+                name: foundClient.name,
+                surname: foundClient.surname,
                 deposit: client.deposit,
                 year: String(date.getFullYear()),
                 month: String(date.getMonth() + 1),
