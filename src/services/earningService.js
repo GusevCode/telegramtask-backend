@@ -89,6 +89,10 @@ const getTableDataByYearAndMonth = async (year, month) => {
         totalReport.profitSum += Number(event.profit);
     });
 
+    additionalIncomes.forEach(income => {
+        totalReport.profitSum += Number(income.sum);
+    });
+
     totalReport.totalCh = totalReport.profitSum / totalReport.amountOfClients;
 
     let promoExpenses = await Month.getAllPromotionExpensesByYearAndMonth(year, month);
@@ -122,12 +126,12 @@ const getTableDataByYearAndMonth = async (year, month) => {
     let tax = await Tax.getTax(year, month);
 
     if (typeof depositIn !== 'undefined') {
-        totalReport.depositIn = depositIn;
+        totalReport.depositIn = Number(depositIn.sum);
         console.log('here');
     }
 
     if (typeof depositOut !== 'undefined') {
-        totalReport.depositOut = depositOut;
+        totalReport.depositOut = Number(depositOut.sum);
         console.log('here');
     }
     

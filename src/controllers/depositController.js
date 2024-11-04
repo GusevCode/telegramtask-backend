@@ -42,6 +42,7 @@ const createDeposit = async(req, res) => {
     }
 
     const newDeposit = {
+        type: type,
         date: body.date,
         sum: body.sum,
     };

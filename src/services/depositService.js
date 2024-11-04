@@ -11,13 +11,14 @@ const createDeposit = async (type, deposit) => {
 
     const depositToInsert = {
         id: uuid(),
+        type: deposit.type,
         sum: deposit.sum,
         year: String(date.getFullYear()),
         month: String(date.getMonth() + 1),
         day: String(date.getDate()),
     };
 
-    const createdDeposit = await Deposit.createDeposit(type, deposit);
+    const createdDeposit = await Deposit.createDeposit(type, depositToInsert);
 
     return createdDeposit;
 

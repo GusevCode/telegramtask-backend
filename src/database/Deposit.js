@@ -22,7 +22,7 @@ const createDeposit = async (type, deposit) => {
         const db = await getDb();
         const collection = db.collection('deposits');
 
-        const isAlreadyAdded = (await collection.find({type: type, year: "deposit.year", month: "deposit.month"}).toArray()).at(0);
+        const isAlreadyAdded = (await collection.find({type: type, year: deposit.year, month: deposit.month}).toArray()).at(0);
 
         if (typeof isAlreadyAdded === "undefined") {
             const res = await collection.insertOne(deposit);
