@@ -169,7 +169,7 @@ const addClient = async (eventId, client) => {
             const date = new Date();
 
             const clientToInsert = {
-                id: uuid(),
+                id: client.id,
                 name: client.name,
                 surname: client.surname,
                 deposit: client.deposit,
