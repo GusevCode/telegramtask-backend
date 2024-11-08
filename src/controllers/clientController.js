@@ -32,9 +32,9 @@ const createNewClient = async (req, res) => {
     }
 
     const newClient = {
-        name: body.name,
-        surname: body.surname,
-        date: body.date,
+        name: body.name.trim(),
+        surname: body.surname.trim(),
+        date: body.date.trim(),
     }
 
     const createdClient = await clientService.createNewClient(

@@ -26,7 +26,6 @@ const getOneClient = async (clientId) => {
         const collection = db.collection('clients');
 
         result = (await collection.find({id: clientId}).toArray()).at(0);
-        delete result["_id"];
     } catch (err) {
         console.log(err);
     }

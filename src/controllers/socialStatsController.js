@@ -41,8 +41,8 @@ const createNewStat = async (req, res) => {
     }
 
     const newStat = {
-        date: body.date,
-        count: body.count,
+        date: body.date.trim(),
+        count: body.count.trim(),
     };
 
     const createdStat = await statsService.createNewStat(
@@ -74,9 +74,9 @@ const updateStat = async (req, res) => {
     }
 
     const updatedStat = await statsService.updateStat(
-        socnet,
-        id,
-        body,
+        socnet.trim(),
+        id.trim(),
+        body.trim(),
     );
 
     res.send({

@@ -11,6 +11,10 @@ const getTax = async (req, res) => {
 
     const tax = await taxService.getTax(year, month);
 
+    if (tax === undefined) {
+        tax = {};
+    }
+
     res.send({
         status: 'OK',
         data: tax,
@@ -33,6 +37,10 @@ const createTax = async (req, res) => {
 
     const createdTax = await taxService.createTax(newTax);
 
+    if (createTax === undefined) {
+        createTax = {};
+    }
+
     res.send({
         status: 'OK',
         data: createdTax,
@@ -50,6 +58,10 @@ const updateTax = async (req, res) => {
     }
 
     const updatedTax = await taxService.updateTax(year, month, body);
+
+    if (updateTax === undefined) {
+        updateTax = {};
+    }
 
     res.send({
         status: 'OK',

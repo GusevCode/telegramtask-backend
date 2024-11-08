@@ -15,7 +15,11 @@ const getDeposit = async (req, res) => {
         return;
     }
 
-    const deposit = await depositService.getDeposit(type, year, month);
+    deposit = await depositService.getDeposit(type, year, month);
+
+    if (deposit === undefined) {
+        deposit = {};
+    }
 
     res.send({
         status: 'OK',
@@ -43,11 +47,15 @@ const createDeposit = async(req, res) => {
 
     const newDeposit = {
         type: type,
-        date: body.date,
-        sum: body.sum,
+        date: body.date.trim(),
+        sum: body.sum.trim(),
     };
 
     const createdDeposit = await depositService.createDeposit(type, newDeposit);
+
+    if (createDeposit === undefined) {
+        createDeposit = {};
+    }
 
     res.send({
         status: 'OK',
@@ -70,6 +78,10 @@ const updateDeposit = async(req, res) => {
     }
 
     const updatedDeposit = await depositService(type, year, month, body);
+
+    if (updateDeposit === undefined) {
+        updateDeposit = {};
+    }
 
     res.send({
         status: 'OK',

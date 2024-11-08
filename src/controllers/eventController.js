@@ -32,8 +32,8 @@ const createNewEvent = async (req, res) => {
     }
 
     const newEvent = {
-        name: body.name,
-        date: body.date,
+        name: body.name.trim(),
+        date: body.date.trim(),
     }
 
     const createdEvent = await eventService.createNewEvent(
@@ -114,9 +114,9 @@ const addClient = async (req, res) => {
     }
 
     const clientToAdd = {
-        name: body.name,
-        surname: body.surname,
-        deposit: body.deposit,
+        name: body.name.trim(),
+        surname: body.surname.trim(),
+        deposit: body.deposit.trim(),
     }
 
     const addedClient = await eventService.addClient(
@@ -165,9 +165,9 @@ const addExpense = async (req, res) => {
     }
 
     const expenseToAdd = {
-        name: body.name,
-        date: body.date,
-        sum: body.sum        
+        name: body.name.trim(),
+        date: body.date.trim(),
+        sum: body.sum.trim()        
     }
 
     const addedExpense = await eventService.addExpense(eventId, expenseToAdd);
