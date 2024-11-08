@@ -9,7 +9,7 @@ const getTax = async (req, res) => {
         return;
     }
 
-    const tax = await taxService.getTax(year, month);
+    let tax = await taxService.getTax(year, month);
 
     if (tax === undefined) {
         tax = {};
@@ -35,7 +35,7 @@ const createTax = async (req, res) => {
         sum: body.sum.trim(),
     }
 
-    const createdTax = await taxService.createTax(newTax);
+    let createdTax = await taxService.createTax(newTax);
 
     if (createTax === undefined) {
         createTax = {};
@@ -57,7 +57,7 @@ const updateTax = async (req, res) => {
         return;
     }
 
-    const updatedTax = await taxService.updateTax(year, month, body);
+    let updatedTax = await taxService.updateTax(year, month, body);
 
     if (updateTax === undefined) {
         updateTax = {};

@@ -51,7 +51,7 @@ const createDeposit = async(req, res) => {
         sum: body.sum.trim(),
     };
 
-    const createdDeposit = await depositService.createDeposit(type, newDeposit);
+    let createdDeposit = await depositService.createDeposit(type, newDeposit);
 
     if (createDeposit === undefined) {
         createDeposit = {};
@@ -77,7 +77,7 @@ const updateDeposit = async(req, res) => {
         return;
     }
 
-    const updatedDeposit = await depositService(type, year, month, body);
+    let updatedDeposit = await depositService(type, year, month, body);
 
     if (updateDeposit === undefined) {
         updateDeposit = {};
