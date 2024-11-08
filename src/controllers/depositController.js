@@ -15,7 +15,7 @@ const getDeposit = async (req, res) => {
         return;
     }
 
-    deposit = await depositService.getDeposit(type, year, month);
+    let deposit = await depositService.getDeposit(type, year, month);
 
     if (deposit === undefined) {
         deposit = {};
