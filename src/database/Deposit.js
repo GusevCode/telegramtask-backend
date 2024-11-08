@@ -26,6 +26,8 @@ const createDeposit = async (type, deposit) => {
 
         if (typeof isAlreadyAdded === "undefined") {
             const res = await collection.insertOne(deposit);
+        } else {
+            await collection.findOneAndUpdate({type: type, year: deposit.year, month: deposit.month}, { $set: { ...deposit } });
         }
     } catch (err) {
         console.log(err);

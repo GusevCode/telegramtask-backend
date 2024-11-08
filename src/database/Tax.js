@@ -26,6 +26,8 @@ const createTax = async (tax) => {
 
         if (typeof isAlreadyAdded === "undefined") {
             const res = await collection.insertOne(tax);
+        } else {
+            await collection.findOneAndUpdate({type: type, year: tax.year, month: tax.month}, { $set: { ...tax } });
         }
     } catch (err) {
         console.log(err);

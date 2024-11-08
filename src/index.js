@@ -20,6 +20,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //Early init
+const auth = require('./auth');
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -32,9 +33,16 @@ app.use((req, res, next) => {
     const date = _date.toLocaleDateString();
     const time = (_date.getHours().toString() + ":" + _date.getMinutes().toString() + ":" + _date.getSeconds().toString()); 
     console.log(`[${date} at ${time}] | Recieved ${req.method} request for ${req.url}`);
-
-    next();
-})
+    if (auth.auth(req, res)) {
+        next();
+    } else {
+        res.status(401).send({
+            data: {
+                message: "Authentification failed",
+            }
+        });
+    }
+});
 
 app.use('/api/v1/clients', v1ClientRouter);
 app.use('/api/v1/events', v1EventRouter);

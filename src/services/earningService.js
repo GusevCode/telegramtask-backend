@@ -47,6 +47,7 @@ const getTableDataByYearAndMonth = async (year, month) => {
     let additionalIncomes = await Month.getAllProfitsByYearAndMonth(year, month);
 
     additionalIncomes.forEach(income => {
+        income.sum = Number(income.sum);
         delete income['id'];
         delete income['year'];
         delete income['month'];
@@ -127,17 +128,14 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     if (typeof depositIn !== 'undefined') {
         totalReport.depositIn = Number(depositIn.sum);
-        console.log('here');
     }
 
     if (typeof depositOut !== 'undefined') {
         totalReport.depositOut = Number(depositOut.sum);
-        console.log('here');
     }
     
     if (typeof tax !== 'undefined') {
-        totalReport.tax = tax;
-        console.log('here');
+        totalReport.tax = Number(tax.sum);
     }
 
     totalReport.totalCheckout = Number(totalReport.netIncome) +
