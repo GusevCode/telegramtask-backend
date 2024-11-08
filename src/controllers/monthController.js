@@ -29,9 +29,9 @@ const createPromotionExpense = async (req, res) => {
     }
 
     const newPromotionExpense = {
-        date: body.date,
-        name: body.name,
-        sum: body.sum
+        date: body.date.trim(),
+        name: body.name.trim(),
+        sum: body.sum.trim()
     }
 
     const createdPromotionExpense = await monthService.createNewPromotionExpense(
@@ -108,9 +108,9 @@ const createOrgExpense = async (req, res) => {
     }
 
     const newOrgExpense = {
-        date: body.date,
-        name: body.name,
-        sum: body.sum
+        date: body.date.trim(),
+        name: body.name.trim(),
+        sum: body.sum.trim()
     }
 
     const createdOrgExpense = await monthService.createNewOrgExpense(
@@ -187,9 +187,9 @@ const createInvestitionExpense = async (req, res) => {
     }
 
     const newInvestExpense = {
-        date: body.date,
-        name: body.name,
-        sum: body.sum
+        date: body.date.trim(),
+        name: body.name.trim(),
+        sum: body.sum.trim()
     }
 
     const createdInvestExpense = await monthService.createNewInvestitionExpense(
@@ -266,9 +266,9 @@ const createProfit = async (req, res) => {
     }
 
     const newProfit = {
-        date: body.date,
-        name: body.name,
-        sum: body.sum,
+        date: body.date.trim(),
+        name: body.name.trim(),
+        sum: body.sum.trim(),
     }
 
     const createdProfit = await monthService.createNewProfit(

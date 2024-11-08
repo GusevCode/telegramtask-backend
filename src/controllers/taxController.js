@@ -27,8 +27,8 @@ const createTax = async (req, res) => {
     }
 
     const newTax = {
-        date: body.date,
-        sum: body.sum,
+        date: body.date.trim(),
+        sum: body.sum.trim(),
     }
 
     const createdTax = await taxService.createTax(newTax);
