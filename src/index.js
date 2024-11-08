@@ -15,6 +15,8 @@ const v1TaxRouter = require('./v1/routes/taxRouter');
 const v1EarningRouter = require('./v1/routes/earningRoutes');
 const v1SummaryRouter = require('./v1/routes/summaryRouter');
 
+const v1AuthRouter = require('./v1/routes/authRouter');
+
 //Settings
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +35,9 @@ app.use((req, res, next) => {
     const date = _date.toLocaleDateString();
     const time = (_date.getHours().toString() + ":" + _date.getMinutes().toString() + ":" + _date.getSeconds().toString()); 
     console.log(`[${date} at ${time}] | Recieved ${req.method} request for ${req.url}`);
-    if (auth.auth(req, res)) {
+    if (auth.auth(req, res) && req.url != "/api/v1/auth") {
+        next();
+    } else if (req.url == "/api/v1/auth") {
         next();
     } else {
         res.status(401).send({
@@ -49,11 +53,12 @@ app.use('/api/v1/events', v1EventRouter);
 app.use('/api/v1/month', v1MonthRouter);
 app.use('/api/v1/social_stats', v1SocialStatsRouter);
 app.use('/api/v1/deposits', v1DepositRouter);
-app.use('/api/v1/taxes', v1TaxRouter);
+app.use('/api/v1/taxes', v1TaxRouter);;
 
 app.use('/api/v1/earning', v1EarningRouter);
 app.use('/api/v1/summary', v1SummaryRouter);
 
+app.use('/api/v1/auth', v1AuthRouter);
 
 //Start
 app.listen(PORT, () => {
