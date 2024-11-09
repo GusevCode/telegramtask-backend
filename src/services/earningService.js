@@ -40,10 +40,6 @@ const getTableDataByYearAndMonth = async (year, month) => {
         delete elem['expenses'];
     });
 
-    if (!isEvent) {
-        return null;
-    }
-
     let additionalIncomes = await Month.getAllProfitsByYearAndMonth(year, month);
 
     additionalIncomes.forEach(income => {
