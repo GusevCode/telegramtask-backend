@@ -31,7 +31,6 @@ const getTableDataByYear = async (year) => {
         result[month].ch = result[month].profit / result[month].amountOfHumanActivities;
         result[month].netIncome = result[month].profit - result[month].promotion - result[month].org;
         result[month].total = result[month].netIncome - result[month].investitions - result[month].tax;
-    
     }
     return result;
 };

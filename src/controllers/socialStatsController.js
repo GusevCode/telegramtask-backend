@@ -15,7 +15,11 @@ const getAllStatsByYearAndMonth = async (req, res) => {
         return;
     }
 
-    const stats = await statsService.getAllStatsByYearAndMonth(socnet, yearNumber, monthNumber);
+    let stats = await statsService.getAllStatsByYearAndMonth(socnet, yearNumber, monthNumber);
+
+    if (stats === undefined) {
+        stats = [];
+    }
 
     res.send({
         status: 'OK',
@@ -41,8 +45,8 @@ const createNewStat = async (req, res) => {
     }
 
     const newStat = {
-        date: body.date.trim(),
-        count: body.count.trim(),
+        date: body.date,
+        count: body.count,
     };
 
     const createdStat = await statsService.createNewStat(
@@ -73,11 +77,15 @@ const updateStat = async (req, res) => {
         return;
     }
 
-    const updatedStat = await statsService.updateStat(
+    let updatedStat = await statsService.updateStat(
         socnet.trim(),
         id.trim(),
         body.trim(),
     );
+
+    if (updatedStat === undefined) {
+        updatedStat = {};
+    }
 
     res.send({
         status: 'OK',
