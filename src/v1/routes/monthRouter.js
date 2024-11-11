@@ -16,7 +16,7 @@ router.delete('/expenses/orgs/:orgId', monthController.deleteOrgExpense);
 router.get('/expenses/investitions/:yearNumber/:monthNumber', monthController.getAllInvestitionExpensesByYearAndMonth);
 router.post('/expenses/investitions/', monthController.createInvestitionExpense);
 router.patch('/expenses/investitions/:investitionId', monthController.updateInvestitionExpense);
-router.delete('/expenses/ivenstitions/:investitionId', monthController.deleteInvestitionExpense);
+router.delete('/expenses/investitions/:investitionId', monthController.deleteInvestitionExpense);
 
 router.get('/profits/:yearNumber/:monthNumber', monthController.getAllProfitsByYearAndMonth);
 router.post('/profits/', monthController.createProfit);

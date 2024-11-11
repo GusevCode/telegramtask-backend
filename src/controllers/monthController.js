@@ -225,14 +225,14 @@ const updateInvestitionExpense = async (req, res) => {
 
 const deleteInvestitionExpense = async (req, res) => {
     const {
-        params: { orgId },
+        params: { investitionId },
     } = req;
 
-    if (!orgId) {
+    if (!investitionId) {
         return;
     }
 
-    await monthService.deleteInvestitionExpense(orgId);
+    await monthService.deleteInvestitionExpense(investitionId);
 
     res.status(204).send({ status: 'OK' });
 };
