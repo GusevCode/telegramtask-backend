@@ -32,15 +32,15 @@ const getTableDataByYear = async (year) => {
         result[month].netIncome = result[month].profit - result[month].promotion - result[month].org;
         result[month].total = result[month].netIncome - result[month].investitions - result[month].tax;
 
-        if (result[month].marginality == 0) {
+        if (result[month].marginality == null) {
             result[month].marginality = 0;
         }
         
-        if (result[month].averageCheck == 0) {
+        if (result[month].averageCheck == null) {
             result[month].averageCheck = 0;
         }
         
-        if (result[month].ch == 0) {
+        if (result[month].ch == null) {
             result[month].ch = 0;
         }
     }
