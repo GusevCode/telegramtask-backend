@@ -12,12 +12,12 @@ const getTableDataByYear = async (year) => {
             month: month,
             turnover: earningsData.totalReport.incomeSum, // Оборот
             profit: earningsData.totalReport.profitSum, // прибыль
-            marginality: 0, // маржинальность
+            marginality: 0, // маржинальность (null)
             amountOfEvents: earningsData.totalReport.amountOfEvents, // Колличество ивентов
             amountOfHumanActivities: earningsData.totalReport.humanActivities, // ЧМ
             amountOfNewHumanActivities: earningsData.totalReport.amountOfNewClients, // ЧМ новые
-            averageCheck: 0, // Средний чек
-            ch: 0, //ch
+            averageCheck: 0, // Средний чек (null)
+            ch: 0, //ch (null)
             promotion: earningsData.totalReport.promotionExpensesSum, // Продвижение
             org: earningsData.totalReport.orgExpensesSum, // Орграсходы
             netIncome: 0, // Чистыми
@@ -31,6 +31,18 @@ const getTableDataByYear = async (year) => {
         result[month].ch = result[month].profit / result[month].amountOfHumanActivities;
         result[month].netIncome = result[month].profit - result[month].promotion - result[month].org;
         result[month].total = result[month].netIncome - result[month].investitions - result[month].tax;
+
+        if (!result[month].marginality) {
+            result[month].marginality = 0;
+        }
+        
+        if (!result[month].averageCheck) {
+            result[month].averageCheck = 0;
+        }
+        
+        if (!result[month].ch) {
+            result[month].ch = 0;
+        }
     }
     return result;
 };
