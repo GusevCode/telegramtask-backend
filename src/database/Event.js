@@ -116,7 +116,11 @@ const getAllClients = async (eventId) => {
         const collection = db.collection('events');
 
         const res = (await collection.find({id: eventId}).toArray()).at(0);
-        delete res["_id"];
+        
+        if (!res)
+        {
+            return null;
+        }
 
         res.clients.forEach(client => {
             result.push({
@@ -131,23 +135,24 @@ const getAllClients = async (eventId) => {
     return result;
 }
 
-const addClient = async (eventId, client) => { 
+const addClient = async (eventId, client) => {  
     let result = client;
 
     try {
         const db = await getDb();
         const collection = db.collection('events');
 
-        const foundClient = await Client.getClientByNameAndSurname(client.name, client.surname);
+        const foundClient = await Client.getClientByFullname(client.fullname);
 
         if (typeof foundClient === 'undefined') {
             const date = new Date();
 
             const clientToInsert = {
                 id: uuid(),
-                name: client.name,
-                surname: client.surname,
-                deposit: client.deposit,
+                fullname: client.fullname,
+                amount_of_payment: client.amount_of_payment,
+                discount_percent: client.discount_percent,
+                discount_description: client.discount_description,
                 year: String(date.getFullYear()),
                 month: String(date.getMonth() + 1),
                 day: String(date.getDate()),
@@ -156,8 +161,7 @@ const addClient = async (eventId, client) => {
 
             const clientToClientDB = {
                 id: clientToInsert.id,
-                name: client.name,
-                surname: client.surname,
+                fullname: client.fullname,
                 year: String(date.getFullYear()),
                 month: String(date.getMonth() + 1),
                 day: String(date.getDate()),
@@ -170,9 +174,10 @@ const addClient = async (eventId, client) => {
 
             const clientToInsert = {
                 id: foundClient.id,
-                name: foundClient.name,
-                surname: foundClient.surname,
-                deposit: client.deposit,
+                fullname: foundClient.fullname,
+                amount_of_payment: client.amount_of_payment,
+                discount_percent: client.discount_percent,
+                discount_description: client.discount_description,
                 year: String(date.getFullYear()),
                 month: String(date.getMonth() + 1),
                 day: String(date.getDate()),

@@ -15,6 +15,7 @@ const getOneClient = async (req, res) => {
     } = req;
 
     if (!clientId) {
+        res.status(400).send();
         return;
     }
     const client = await clientService.getOneClient(clientId);
@@ -27,6 +28,7 @@ const createNewClient = async (req, res) => {
         !body.fullname ||
         !body.date
     ) {
+        res.status(400).send();
         return;
     }
 
@@ -52,6 +54,7 @@ const updateOneClient = async (req, res) => {
     } = req;
 
     if (!clientId) {
+        res.status(400).send();
         return;
     }
 
@@ -69,6 +72,7 @@ const deleteOneClient = async (req, res) => {
     } = req;
 
     if (!clientId) {
+        res.status(400).send();
         return;
     }
 

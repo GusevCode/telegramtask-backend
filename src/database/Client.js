@@ -33,14 +33,14 @@ const getOneClient = async (clientId) => {
     return result;
 }
 
-const getClientByNameAndSurname = async (name, surname) => {
+const getClientByFullname = async (fullname) => {
     let result = null;
 
     try {
         const db = await getDb();
         const collection = db.collection('clients');
         
-        result = (await collection.find({name: name, surname: surname}).toArray()).at(0);
+        result = (await collection.find({fullname: fullname}).toArray()).at(0);
     } catch (err) {
         console.log(err);
     }
@@ -55,7 +55,7 @@ const createNewClient = async (newClient) => {
         const db = await getDb();
         const collection = db.collection('clients');
 
-        const isAlreadyAdded = (await collection.find({name: newClient.name, surname: newClient.surname}).toArray()).at(0);
+        const isAlreadyAdded = (await collection.find({fullname: newClient.fullname}).toArray()).at(0);
 
         if (typeof isAlreadyAdded === "undefined") {
             const res = await collection.insertOne(newClient);
@@ -110,5 +110,5 @@ module.exports = {
     createNewClient,
     updateOneClient,
     deleteOneClient,
-    getClientByNameAndSurname,
+    getClientByFullname
 };

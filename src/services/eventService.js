@@ -1,5 +1,6 @@
 const { v4: uuid } = require('uuid');
-const Event = require('../database/Event')
+const Event = require('../database/Event');
+const fs = require('node:fs');
 
 const getAllEvents = async () => {
     const allEvents = await Event.getAllEvents();
@@ -53,9 +54,13 @@ const getAllClients = async (eventId) => {
 const addClient = async (eventId, client) => {
     const clients = await getAllClients(eventId);
 
+    if (!clients) {
+        return null;
+    }
+
     let isExsits = false;
     clients.forEach(it => {
-        if (it.name == client.name && it.surname == client.surname) {
+        if (it.fullname == client.fullname) {
             isExsits = true;
         }
     });
@@ -63,6 +68,7 @@ const addClient = async (eventId, client) => {
     if (!isExsits) {
         return await Event.addClient(eventId, client);
     } 
+
     return client;
 }
 
@@ -84,6 +90,18 @@ const getOneExpense = async (eventId, expenseId) => {
     return await Event.getOneExpense(eventId, expenseId);
 }
 
+const getClientsListFilePath = async (eventId) => {
+    const clients = await getAllClients(eventId);
+    let content = "";
+    if (clients) {
+        clients.forEach((client) => {
+            content += client.fullname + "\n";
+        });
+    }
+    fs.writeFileSync('./clients_gen/clients.txt', content);
+    return "./clients_gen/clients.txt";
+}
+
 module.exports = {
     getAllEvents,
     getOneEvent,
@@ -96,4 +114,6 @@ module.exports = {
 
     getAllExpenses,
     addExpense,
+
+    getClientsListFilePath,
 };

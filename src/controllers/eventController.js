@@ -1,4 +1,5 @@
 const eventService = require('../services/eventService');
+const fs = require('fs');
 
 const getAllEvents = async (req, res) => {
     const allEvents = await eventService.getAllEvents();
@@ -15,6 +16,7 @@ const getOneEvent = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -28,6 +30,7 @@ const createNewEvent = async (req, res) => {
         !body.name ||
         !body.date
     ) {
+        res.status(400).send();
         return;
     }
 
@@ -53,6 +56,7 @@ const updateOneEvent = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -70,6 +74,7 @@ const deleteOneEvent = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -84,6 +89,7 @@ const getAllClients = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -100,23 +106,30 @@ const addClient = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
     const { body } = req;
 
     if (
-        !body.name ||
-        !body.surname ||
-        !body.deposit
+        !body.fullname ||
+        !body.amount_of_payment
     ) {
+        res.status(400).send();
         return;
     }
 
-    const clientToAdd = {
-        name: body.name.trim(),
-        surname: body.surname.trim(),
-        deposit: body.deposit.trim(),
+    let clientToAdd = {
+        fullname: body.fullname.trim(),
+        amount_of_payment: body.amount_of_payment.trim(),
+        discount_percent: "0",
+        discount_description: "",
+    }
+
+    if (body.discount_percent && body.discount_description) {
+        clientToAdd.discount_percent = body.discount_percent;
+        clientToAdd.discount_description = body.discount_description;
     }
 
     const addedClient = await eventService.addClient(
@@ -135,6 +148,7 @@ const getAllExpenses = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -151,6 +165,7 @@ const addExpense = async (req, res) => {
     } = req;
 
     if (!eventId) {
+        res.status(400).send();
         return;
     }
 
@@ -161,6 +176,7 @@ const addExpense = async (req, res) => {
         !body.name ||
         !body.sum
     ) {
+        res.status(400).send();
         return;
     }
 
@@ -184,6 +200,7 @@ const getOneExpense = async (req, res) => {
     } = req;
 
     if (!eventId || !expenseId) {
+        res.status(400).send();
         return;
     }
 
@@ -191,6 +208,31 @@ const getOneExpense = async (req, res) => {
     res.status(201).send({
         status: 'OK',
         data: expense,
+    });
+}
+
+const downloadListOfClientsByEventId = async (req, res) => {
+    const {
+        params: { eventId },
+    } = req;    
+
+    if (!eventId) {
+        res.status(400).send();
+        return;
+    }
+
+    const filePath = await eventService.getClientsListFilePath(eventId);
+    res.download(filePath, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            fs.unlink(filePath, (q) => {
+                if (q) {
+                    console.log(q);
+                }
+                res.status(200).send();
+            })
+        }
     });
 }
 
@@ -206,4 +248,6 @@ module.exports = {
     
     getAllExpenses,
     addExpense,
+
+    downloadListOfClientsByEventId,
 };

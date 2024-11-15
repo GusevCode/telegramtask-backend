@@ -22,7 +22,7 @@ const getTableDataByYearAndMonth = async (year, month) => {
         elem.totalIncome = 0;
 
         elem['clients'].forEach(client => {
-            elem.totalIncome += Number(client.deposit);
+            elem.totalIncome += Number(client.amount_of_payment);
         });
         elem.totalExpenses = 0;
 
@@ -31,7 +31,13 @@ const getTableDataByYearAndMonth = async (year, month) => {
         });
 
         elem.profit = elem.totalIncome - elem.totalExpenses;
-        elem.ch = elem.profit / elem.amountOfClients;
+        
+        if (elem.amountOfClients != 0) {
+            elem.ch = elem.profit / elem.amountOfClients;   
+        } else {
+            elem.ch = 0;
+        }
+        
 
         delete elem['_id'];
         delete elem['id'];
@@ -90,7 +96,11 @@ const getTableDataByYearAndMonth = async (year, month) => {
         totalReport.profitSum += Number(income.sum);
     });
 
-    totalReport.totalCh = totalReport.profitSum / totalReport.amountOfClients;
+    if (totalReport.amountOfClients != 0) {
+        totalReport.totalCh = totalReport.profitSum / totalReport.amountOfClients;
+    } else {
+        totalReport.totalCh = 0;
+    }
 
     let promoExpenses = await Month.getAllPromotionExpensesByYearAndMonth(year, month);
     let orgExpenses = await Month.getAllOrgExpensesByYearAndMonth(year, month);
@@ -115,7 +125,11 @@ const getTableDataByYearAndMonth = async (year, month) => {
 
     totalReport.humanActivities = totalReport.amountOfClients;
 
-    totalReport.averageExtraChargeCommon = totalReport.profitSum / totalReport.amountOfClients;
+    if (totalReport.amountOfClients != 0) {
+        totalReport.averageExtraChargeCommon = totalReport.profitSum / totalReport.amountOfClients;
+    } else {
+        totalReport.averageExtraChargeCommon = 0;
+    }
 
     let depositIn = await Deposit.getDeposit('in', year, month);
     let depositOut = await Deposit.getDeposit('out', year, month);

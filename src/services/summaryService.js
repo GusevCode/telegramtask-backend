@@ -26,23 +26,26 @@ const getTableDataByYear = async (year) => {
             total: 0, // Деньги в кассе
         };
 
-        result[month].marginality = result[month].profit / result[month].turnover;
-        result[month].averageCheck = result[month].turnover / result[month].amountOfHumanActivities;
-        result[month].ch = result[month].profit / result[month].amountOfHumanActivities;
-        result[month].netIncome = result[month].profit - result[month].promotion - result[month].org;
-        result[month].total = result[month].netIncome - result[month].investitions - result[month].tax;
-
-        if (typeof result[month].marginality == "null") {
+        if (result[month].turnover != 0) {
+            result[month].marginality = result[month].profit / result[month].turnover;  
+        } else {
             result[month].marginality = 0;
         }
-        
-        if (typeof result[month].averageCheck == "null") {
+
+        if (result[month].amountOfHumanActivities != 0) {
+            result[month].averageCheck = result[month].turnover / result[month].amountOfHumanActivities;
+        } else {
             result[month].averageCheck = 0;
         }
-        
-        if (typeof result[month].ch == "null") {
+
+        if (result[month].amountOfHumanActivities != 0) {
+            result[month].ch = result[month].profit / result[month].amountOfHumanActivities;
+        } else {
             result[month].ch = 0;
         }
+
+        result[month].netIncome = result[month].profit - result[month].promotion - result[month].org;
+        result[month].total = result[month].netIncome - result[month].investitions - result[month].tax;
     }
     return result;
 };

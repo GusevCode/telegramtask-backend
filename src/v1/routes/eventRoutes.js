@@ -13,6 +13,8 @@ router.delete('/:eventId', eventController.deleteOneEvent);
 router.get('/:eventId/clients', eventController.getAllClients);
 router.post('/:eventId/clients', eventController.addClient); 
 
+router.get('/:eventId/clients/download', eventController.downloadListOfClientsByEventId);
+
 router.get('/:eventId/expenses', eventController.getAllExpenses);
 router.post('/:eventId/expenses', eventController.addExpense);
 
