@@ -49,7 +49,7 @@ const getClientByNameAndSurname = async (name, surname) => {
 }
 
 const createNewClient = async (newClient) => {
-    const result = newClient;
+    let result = newClient;
 
     try {
         const db = await getDb();
@@ -59,7 +59,10 @@ const createNewClient = async (newClient) => {
 
         if (typeof isAlreadyAdded === "undefined") {
             const res = await collection.insertOne(newClient);
+        } else {
+            result = isAlreadyAdded;
         }
+        
 
     } catch (err) {
         console.log(err);
@@ -69,7 +72,7 @@ const createNewClient = async (newClient) => {
 }
 
 const updateOneClient = async (clientId, changes) => {
-    const result = changes;
+    let result = changes;
 
     try {
         const db = await getDb();

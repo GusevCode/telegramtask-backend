@@ -24,16 +24,14 @@ const getOneClient = async (req, res) => {
 const createNewClient = async (req, res) => {
     const { body } = req;
     if (
-        !body.name ||
-        !body.surname || 
+        !body.fullname ||
         !body.date
     ) {
         return;
     }
 
     const newClient = {
-        name: body.name.trim(),
-        surname: body.surname.trim(),
+        fullname: body.fullname.trim(),
         date: body.date.trim(),
     }
 
