@@ -28,7 +28,8 @@ const createNewEvent = async (req, res) => {
     const { body } = req;
     if (
         !body.name ||
-        !body.date
+        !body.date ||
+        !body.type
     ) {
         res.status(400).send();
         return;
@@ -37,6 +38,7 @@ const createNewEvent = async (req, res) => {
     const newEvent = {
         name: body.name.trim(),
         date: body.date.trim(),
+        type: body.type.trim(),
     }
 
     const createdEvent = await eventService.createNewEvent(
@@ -140,6 +142,26 @@ const addClient = async (req, res) => {
         status: 'OK',
         data: addedClient,
     });
+}
+
+const updateClient = async (req, res) => {
+    const {
+        body,
+        params: {eventId, clientId},
+    } = req;
+
+    if (!eventId || !clientId) {
+        res.status(400).send();
+        return;
+    }
+
+    const updatedClient = await eventService.updateClient(
+        eventId,
+        clientId,
+        body
+    );
+
+    res.send({ status: 'OK', data: updatedClient });
 }
 
 const getAllExpenses = async (req, res) => {
@@ -250,4 +272,5 @@ module.exports = {
     addExpense,
 
     downloadListOfClientsByEventId,
+    updateClient,
 };

@@ -97,6 +97,50 @@ const updateOneEvent = async (eventId, changes) => {
     return result;
 }
 
+const updateClient = async (eventId, clientId, changes) => {
+    const result = changes;
+
+    try {
+        const db = await getDb();
+        const collection = db.collection('events');
+        
+
+        // Выполняем запрос на обновление
+        let result = (await collection.find(
+            {
+                id: eventId,
+            }
+        ).toArray()).at(0);
+
+        if (typeof result !== "undefined") {
+            let flag = 0;
+
+            result.clients.forEach((client) => {
+                if (client.id == clientId) {
+                    flag = 1;
+                    client.amount_of_payment = changes.amount_of_payment;
+                }
+            });
+
+            if (flag > 0) {
+                let res = (await collection.findOneAndUpdate(
+                    {id: eventId},
+                    {$set: result}
+                ));
+            }
+
+        }
+
+        
+        console.log(result);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+    return result;
+}
+
 const deleteOneEvent = async (eventId) => {
     try {
         const db = await getDb();
@@ -247,4 +291,6 @@ module.exports = {
     addExpense,
 
     getAllEventsByYearAndMonth,
+    
+    updateClient,
 }

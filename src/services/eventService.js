@@ -18,6 +18,7 @@ const createNewEvent = async (newEvent) => {
     const eventToInsert = {
         id: uuid(),
         name: newEvent.name,
+        type: newEvent.type,
         date: {  
             year: String(date.getFullYear()),
             month: String(date.getMonth() + 1),
@@ -40,6 +41,13 @@ const updateOneEvent = async (eventId, changes) => {
         changes
     );
     return updatedEvent;
+}
+
+const updateClient = async (eventId, clientId, changes) => {
+    const updatedClient = await Event.updateClient(
+        eventId, clientId, changes
+    );
+    return updatedClient;
 }
 
 const deleteOneEvent = async (eventId) => {
@@ -116,4 +124,5 @@ module.exports = {
     addExpense,
 
     getClientsListFilePath,
+    updateClient,
 };

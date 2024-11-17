@@ -12,6 +12,7 @@ router.delete('/:eventId', eventController.deleteOneEvent);
 
 router.get('/:eventId/clients', eventController.getAllClients);
 router.post('/:eventId/clients', eventController.addClient); 
+router.patch('/:eventId/clients/:clientId', eventController.updateClient);
 
 router.get('/:eventId/clients/download', eventController.downloadListOfClientsByEventId);
 
