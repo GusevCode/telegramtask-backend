@@ -118,7 +118,12 @@ const updateClient = async (eventId, clientId, changes) => {
             result.clients.forEach((client) => {
                 if (client.id == clientId) {
                     flag = 1;
-                    client.amount_of_payment = changes.amount_of_payment;
+                    if (changes.amount_of_payment)
+                        client.amount_of_payment = changes.amount_of_payment;
+                    if (changes.discount_percent)
+                        client.discount_percent = changes.discount_percent;
+                    if (changes.discount_description)
+                        client.discount_description = changes.discount_description;
                 }
             });
 
@@ -131,8 +136,6 @@ const updateClient = async (eventId, clientId, changes) => {
 
         }
 
-        
-        console.log(result);
 
     } catch (err) {
         console.log(err);
