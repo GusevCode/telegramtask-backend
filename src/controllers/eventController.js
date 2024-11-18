@@ -115,8 +115,7 @@ const addClient = async (req, res) => {
     const { body } = req;
 
     if (
-        !body.fullname ||
-        !body.amount_of_payment
+        !body.fullname 
     ) {
         res.status(400).send();
         return;
@@ -124,7 +123,7 @@ const addClient = async (req, res) => {
 
     let clientToAdd = {
         fullname: body.fullname.trim(),
-        amount_of_payment: body.amount_of_payment.trim(),
+        amount_of_payment: "0",
         discount_percent: "0",
         discount_description: "",
     }
@@ -132,6 +131,10 @@ const addClient = async (req, res) => {
     if (body.discount_percent && body.discount_description) {
         clientToAdd.discount_percent = body.discount_percent;
         clientToAdd.discount_description = body.discount_description;
+    }
+
+    if (body.amount_of_payment) {
+        clientToAdd.amount_of_payment = body.amount_of_payment.trim();
     }
 
     const addedClient = await eventService.addClient(
