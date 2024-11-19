@@ -41,7 +41,7 @@ app.use((req, res, next) => {
     if (auth.auth(req, res) && req.url != "/api/v1/auth") {
         next();
     } else if (bypassRoutes.test(req.url)) {
-        res.status(200).send("Hello, world!");
+        next();
     } else if (req.url == "/api/v1/auth") {
         next();
     } else {
