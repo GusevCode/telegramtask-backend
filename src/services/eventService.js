@@ -55,7 +55,9 @@ const deleteOneEvent = async (eventId) => {
 }
 
 const getAllClients = async (eventId) => {
-    const clients = await Event.getAllClients(eventId);
+    let clients = await Event.getAllClients(eventId);
+    if (clients)
+        clients = clients.sort((a, b) => a.fullname.localeCompare(b.fullname)); 
     return clients;
 }
 
@@ -99,15 +101,28 @@ const getOneExpense = async (eventId, expenseId) => {
 }
 
 const getClientsListFilePath = async (eventId) => {
+    const event = await Event.getOneEvent(eventId);
     const clients = await getAllClients(eventId);
-    let content = "";
-    if (clients) {
-        clients.forEach((client) => {
-            content += client.fullname + "\n";
-        });
+
+    if (event) {
+
+        let content = "";
+        if (clients) {
+            clients.forEach((client) => {
+                content += client.fullname + "\n";
+            });
+        }
+
+        const customUUID = uuid();
+        // const filename = `${event.name} (${event.date.year}:${event.date.month}:${event.date.day})`;
+        const filename = `${event.name} (${event.date.year}.${event.date.month}.${event.date.day}) [${customUUID}]`;
+        const filepath = `./clients_gen/${filename}.txt`;
+
+        fs.writeFileSync(filepath, content);
+        return filepath;
+    } else {
+        return null;
     }
-    fs.writeFileSync('./clients_gen/clients.txt', content);
-    return "./clients_gen/clients.txt";
 }
 
 module.exports = {

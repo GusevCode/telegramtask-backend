@@ -247,18 +247,23 @@ const downloadListOfClientsByEventId = async (req, res) => {
     }
 
     const filePath = await eventService.getClientsListFilePath(eventId);
-    res.download(filePath, (err) => {
-        if (err) {
-            console.log(err);
-        } else {
-            fs.unlink(filePath, (q) => {
-                if (q) {
-                    console.log(q);
-                }
-                res.status(200).send();
-            })
-        }
-    });
+    
+    if (filePath) {
+        res.download(filePath, (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                fs.unlink(filePath, (q) => {
+                    if (q) {
+                        console.log(q);
+                    }
+                    res.status(200).send();
+                });
+            }
+        });
+    } else {
+        res.status(404).send();
+    }
 }
 
 module.exports = {

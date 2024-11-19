@@ -9,10 +9,12 @@ const getAllEvents = async () => {
         const db = await getDb();
         const collection = db.collection('events');
 
-        result = await collection.find().toArray();
+        result = await collection.find().sort({"clients.fullname": 1}).toArray();
 
         result.forEach(event => {
             delete event["_id"];
+            console.log(event["clients"]);
+            event["clients"] = event["clients"].sort((a, b) => a.fullname.localeCompare(b.fullname));
         });
 
     } catch(err) {
@@ -30,7 +32,8 @@ const getOneEvent = async (eventId) => {
         const collection = db.collection('events');
 
         result = (await collection.find({id: eventId}).toArray()).at(0);
-        delete result["_id"];
+        if (result)
+            delete result["_id"];   
     } catch (err) {
         console.log(err);
     }
