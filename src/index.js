@@ -37,6 +37,8 @@ app.use((req, res, next) => {
     console.log(`[${date} at ${time}] | Recieved ${req.method} request for ${req.url}`);
     if (auth.auth(req, res) && req.url != "/api/v1/auth") {
         next();
+    } else if (req.url == "/api/v1/hello") {
+        res.status(200).send("Hello, world!");
     } else if (req.url == "/api/v1/auth") {
         next();
     } else {
