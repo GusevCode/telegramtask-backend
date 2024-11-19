@@ -35,9 +35,12 @@ app.use((req, res, next) => {
     const date = _date.toLocaleDateString();
     const time = (_date.getHours().toString() + ":" + _date.getMinutes().toString() + ":" + _date.getSeconds().toString()); 
     console.log(`[${date} at ${time}] | Recieved ${req.method} request for ${req.url}`);
+
+    const bypassRoutes = /^\/api\/v1\/events\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\/clients\/download$/;
+
     if (auth.auth(req, res) && req.url != "/api/v1/auth") {
         next();
-    } else if (req.url == "/api/v1/hello") {
+    } else if (bypassRoutes.test(req.url)) {
         res.status(200).send("Hello, world!");
     } else if (req.url == "/api/v1/auth") {
         next();
