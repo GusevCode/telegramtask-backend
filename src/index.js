@@ -2,6 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
+const https = require('https');
+const fs = require('fs');
 
 //Routes
 //v1
@@ -70,3 +72,10 @@ app.listen(PORT, () => {
     console.log(`API is listening on port ${PORT}`);
     console.log(`Running at http://localhost:3000/`);
 });
+
+let options = {
+    key: '',
+    cert: '',
+};
+
+https.createServer(options, app).listen(3443);
