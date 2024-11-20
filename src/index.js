@@ -1,8 +1,7 @@
 //Requires
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors')
-const https = require('https');
+const cors = require('cors');
 const fs = require('fs');
 
 //Routes
@@ -42,9 +41,9 @@ app.use((req, res, next) => {
 
     if (auth.auth(req, res) && req.url != "/api/v1/auth") {
         next();
-    } else if (bypassRoutes.test(req.url)) {
+    } else if (bypassRoutes.test(req.url) || req.url.startsWith('/static')) {
         next();
-    } else if (req.url == "/api/v1/auth") {
+    } else if (req.url == "/api/v1/auth" || req.url == '/') {
         next();
     } else {
         res.status(401).send({
@@ -73,9 +72,4 @@ app.listen(PORT, () => {
     console.log(`Running at http://localhost:3000/`);
 });
 
-let options = {
-    key: '',
-    cert: '',
-};
-
-https.createServer(options, app).listen(3443);
+app.use('/static', express.static('./src/public'));
